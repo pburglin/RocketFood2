@@ -17,7 +17,10 @@ function App() {
   const [extractedText, setExtractedText] = useState<string>('');
   const [analysisResults, setAnalysisResults] = useState<AnalysisResult[]>([]);
   const [overallScore, setOverallScore] = useState<{ score: 'green' | 'yellow' | 'red', reason: string } | null>(null);
-  const [visionService, setVisionService] = useState<VisionService>(VisionService.GOOGLE_CLOUD_VISION);
+  const defaultService = import.meta.env.VITE_DEFAULT_VISION_SERVICE === 'openrouter' 
+    ? VisionService.OPENROUTER 
+    : VisionService.GOOGLE_CLOUD_VISION;
+  const [visionService, setVisionService] = useState<VisionService>(defaultService);
   
   const handleImageCaptured = async (file: File) => {
     setIsLoading(true);

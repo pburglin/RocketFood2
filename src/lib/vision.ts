@@ -93,9 +93,20 @@ export async function extractIngredientsFromText(text: string): Promise<string[]
   const match = text.match(ingredientsRegex);
   
   if (match && match[1]) {
-    // Split the ingredients by common separators
+    // Get the ingredients text
     const ingredientsText = match[1].trim();
-    const ingredients = ingredientsText
+    
+    // First, replace specific separators with a standard separator
+    // Replace "and/or" and "or" with a standard separator
+    let processedText = ingredientsText
+      .replace(/\s+and\/or\s+/gi, ', ')
+      .replace(/\s+or\s+/gi, ', ');
+    
+    // Handle parentheses by replacing them with commas
+    processedText = processedText.replace(/\(/g, ', ').replace(/\)/g, ', ');
+    
+    // Split by common separators and clean up each ingredient
+    const ingredients = processedText
       .split(/,|\.|•|\*|;/)
       .map(item => item.trim())
       .filter(item => item.length > 0);
@@ -103,12 +114,22 @@ export async function extractIngredientsFromText(text: string): Promise<string[]
     return ingredients;
   }
   
-  // If no ingredients section is found, try to extract any words that might be ingredients
+  // If no ingredients section is found, try to extract the ingredients from the full text
   // This is a fallback and might not be accurate
-  const words = text
-    .split(/\s+/)
-    .map(word => word.trim().toLowerCase())
-    .filter(word => word.length > 2 && !/^\d+$/.test(word)); // Filter out numbers and very short words
   
-  return [...new Set(words)]; // Remove duplicates
+  // First, replace specific separators with a standard separator
+  let processedText = text
+    .replace(/\s+and\/or\s+/gi, ', ')
+    .replace(/\s+or\s+/gi, ', ');
+  
+  // Handle parentheses by replacing them with commas
+  processedText = processedText.replace(/\(/g, ', ').replace(/\)/g, ', ');
+  
+  // Split by common separators and clean up each ingredient
+  const ingredients = processedText
+    .split(/,|\.|•|\*|;/)
+    .map(item => item.trim())
+    .filter(item => item.length > 0 && !/^\d+$/.test(item)); // Filter out numbers and empty items
+  
+  return [...new Set(ingredients)]; // Remove duplicates
 }
