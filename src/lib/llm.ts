@@ -1,10 +1,5 @@
 import { LLMResponse, LLMIngredientResponse } from '../types';
 
-interface LLMMessage {
-  role: 'system' | 'user' | 'assistant';
-  content: string;
-}
-
 export async function queryLLMForIngredients(ingredients: string[]): Promise<LLMIngredientResponse | null> {
   const prompt = `
 In a scale of Green as healthy, Yellow as warning and Red as unhealthy, analyze these food ingredients: ${ingredients.join(', ')}
@@ -29,15 +24,43 @@ Return ONLY a valid JSON structure like this example:
   try {
     const content = await aiOptimize(prompt);
     
-    // Extract JSON from the response
-    const jsonMatch = content.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) {
-      console.error('No JSON found in LLM response');
+    // Extract JSON from the response - use a more robust approach
+    // First try to find the largest JSON object in the response
+    let jsonStr = '';
+    let maxLength = 0;
+    
+    // Look for JSON objects with a non-greedy regex
+    const matches = content.match(/\{[\s\S]*?}/g);
+    if (matches) {
+      // Find the largest valid JSON object
+      for (const match of matches) {
+        try {
+          // Check if it's valid JSON
+          JSON.parse(match);
+          // If valid and larger than previous matches, keep it
+          if (match.length > maxLength) {
+            jsonStr = match;
+            maxLength = match.length;
+          }
+        } catch {
+          // Skip invalid JSON
+          continue;
+        }
+      }
+    }
+    
+    if (!jsonStr) {
+      console.error('No valid JSON found in LLM response');
       return null;
     }
     
-    const jsonStr = jsonMatch[0];
-    return JSON.parse(jsonStr) as LLMIngredientResponse;
+    try {
+      return JSON.parse(jsonStr) as LLMIngredientResponse;
+    } catch (parseError) {
+      console.error('JSON Parse error:', parseError);
+      console.error('Problematic JSON string:', jsonStr);
+      return null;
+    }
   } catch (error) {
     console.error('Error querying LLM for ingredients:', error);
     return null;

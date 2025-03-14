@@ -99,6 +99,22 @@ export const INGREDIENTS_DATABASE: IngredientDatabase = {
         "buttermilk": {
             description: "Buttermilk is rich in probiotics, calcium, and vitamins, supporting gut health, bone strength, and overall well-being, making it a nutritious choice when consumed in moderation",
             alternatives: []
+        },
+        "soybean": {
+            description: "A nutrient-dense source of plant-based protein and beneficial compounds, supporting heart health and reducing certain disease risks",
+            alternatives: []
+        },
+        "cocoa powder": {
+            description: "Rich in antioxidants and compounds that support heart and brain health, but benefits are reduced in processed forms",
+            alternatives: []
+        },
+        "soy lecithin": {
+            description: "Acts as an emulsifier and contains beneficial compounds like choline, supporting cellular and brain health",
+            alternatives: []
+        },
+        "baking soda": {
+            description: "Safe in small amounts and can aid digestion, but excessive use may cause health issues like stomach upset or electrolyte imbalance",
+            alternatives: []
         }
     },
 
@@ -172,6 +188,10 @@ export const INGREDIENTS_DATABASE: IngredientDatabase = {
             description: "Cornmeal is a good source of carbohydrates and provides some essential nutrients, but it lacks the fiber and nutrient density of whole grains",
             alternatives: []
         },
+        "corn": {
+            description: "Offers fiber and essential nutrients but can spike blood sugar levels, especially in processed forms",
+            alternatives: []
+        },
         "cheese seasoning": {
             description: "Cheese seasoning can enhance flavor, but it often contains high levels of sodium and artificial additives, which can pose health risks if consumed in excess",
             alternatives: []
@@ -222,6 +242,22 @@ export const INGREDIENTS_DATABASE: IngredientDatabase = {
         },
         "disodium guanylate": {
             description: "Disodium guanylate, a flavor enhancer often paired with MSG, is generally safe in regulated amounts but may cause issues for individuals sensitive to purines or with gout",
+            alternatives: []
+        },
+        "cane sugar": {
+            description: "Provides quick energy but lacks essential nutrients and can contribute to weight gain and chronic diseases if consumed excessively",
+            alternatives: []
+        },
+        "palm oil": {
+            description: "Contains beneficial antioxidants but is high in saturated fats, which may raise cholesterol levels and increase heart disease risk",
+            alternatives: []
+        },
+        "wheat floor": { // typo
+            description: "Whole wheat flour is rich in fiber and nutrients, but refined wheat flour lacks these benefits and can cause blood sugar spikes",
+            alternatives: []
+        },
+        "cornstarch": {
+            description: "Useful as a thickener but high in refined carbs and low in nutrients, potentially spiking blood sugar levels",
             alternatives: []
         }
     },
