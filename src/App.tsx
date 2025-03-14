@@ -4,7 +4,6 @@ import Footer from './components/Footer';
 import ImageUploader from './components/ImageUploader';
 import AnalysisResults from './components/AnalysisResults';
 import Tips from './components/Tips';
-import VisionServiceToggle from './components/VisionServiceToggle';
 import { extractTextFromImage, extractIngredientsFromText } from './lib/vision';
 import { analyzeIngredients, getOverallScore } from './lib/analyzer';
 import { AnalysisResult } from './types';
@@ -17,10 +16,9 @@ function App() {
   const [extractedText, setExtractedText] = useState<string>('');
   const [analysisResults, setAnalysisResults] = useState<AnalysisResult[]>([]);
   const [overallScore, setOverallScore] = useState<{ score: 'green' | 'yellow' | 'red', reason: string } | null>(null);
-  const defaultService = import.meta.env.VITE_DEFAULT_VISION_SERVICE === 'openrouter' 
+  const visionService = import.meta.env.VITE_DEFAULT_VISION_SERVICE === 'openrouter' 
     ? VisionService.OPENROUTER 
     : VisionService.GOOGLE_CLOUD_VISION;
-  const [visionService, setVisionService] = useState<VisionService>(defaultService);
   
   const handleImageCaptured = async (file: File) => {
     setIsLoading(true);
@@ -68,12 +66,6 @@ function App() {
             Scan food ingredient labels to identify potentially harmful or misleading ingredients. 
             Get instant feedback on the healthiness of your food choices.
           </p>
-          <div className="mt-4 flex justify-center">
-            <VisionServiceToggle 
-              selectedService={visionService} 
-              onServiceChange={setVisionService} 
-            />
-          </div>
         </div>
         
         <ImageUploader onImageCaptured={handleImageCaptured} isLoading={isLoading} />

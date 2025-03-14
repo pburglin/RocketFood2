@@ -22,9 +22,9 @@ interface VisionResponse {
 
 export async function extractTextFromImage(
   imageFile: File, 
-  visionService: VisionService = VisionService.GOOGLE_CLOUD_VISION
+  visionService: VisionService
 ): Promise<string> {
-  // Use the selected vision service
+  // Use the service specified in the .env file
   if (visionService === VisionService.OPENROUTER) {
     return extractTextWithOpenRouter(imageFile);
   } else {
@@ -92,38 +92,34 @@ export async function extractIngredientsFromText(text: string): Promise<string[]
   const ingredientsRegex = /ingredients:?\s*([^.]*)/i;
   const match = text.match(ingredientsRegex);
   
+  let ingredientsText = '';
+  
   if (match && match[1]) {
     // Get the ingredients text
-    const ingredientsText = match[1].trim();
-    
-    // First, replace specific separators with a standard separator
-    // Replace "and/or" and "or" with a standard separator
-    let processedText = ingredientsText
-      .replace(/\s+and\/or\s+/gi, ', ')
-      .replace(/\s+or\s+/gi, ', ');
-    
-    // Handle parentheses by replacing them with commas
-    processedText = processedText.replace(/\(/g, ', ').replace(/\)/g, ', ');
-    
-    // Split by common separators and clean up each ingredient
-    const ingredients = processedText
-      .split(/,|\.|•|\*|;/)
-      .map(item => item.trim())
-      .filter(item => item.length > 0);
-    
-    return ingredients;
+    ingredientsText = match[1].trim();
+  } else {
+    // If no ingredients section is found, use the full text
+    ingredientsText = text;
   }
   
-  // If no ingredients section is found, try to extract the ingredients from the full text
-  // This is a fallback and might not be accurate
-  
   // First, replace specific separators with a standard separator
-  let processedText = text
+  // Replace "and/or" and "or" with a standard separator
+  let processedText = ingredientsText
     .replace(/\s+and\/or\s+/gi, ', ')
     .replace(/\s+or\s+/gi, ', ');
   
   // Handle parentheses by replacing them with commas
   processedText = processedText.replace(/\(/g, ', ').replace(/\)/g, ', ');
+  
+  // Replace line breaks with commas (new requirement)
+  processedText = processedText.replace(/\n/g, ', ');
+  
+  // Replace " - " with commas (new requirement)
+  processedText = processedText.replace(/\s-\s/g, ', ');
+  
+  // Fix " -" without a space on the right side (new requirement)
+  // For example, "red 40 -lake" should be "red 40 lake"
+  processedText = processedText.replace(/\s-([^\s])/g, ' $1');
   
   // Split by common separators and clean up each ingredient
   const ingredients = processedText
