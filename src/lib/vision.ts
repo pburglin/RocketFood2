@@ -106,6 +106,7 @@ export async function extractIngredientsFromText(text: string): Promise<string[]
   // Replace "and/or" and "or" with a standard separator
   let processedText = ingredientsText
     .replace(/\s+and\/or\s+/gi, ', ')
+    .replace(/\s+and\s+/gi, ', ')
     .replace(/\s+or\s+/gi, ', ');
   
   // Handle parentheses by replacing them with commas

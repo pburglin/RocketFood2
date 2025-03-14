@@ -60,6 +60,10 @@ export const INGREDIENTS_DATABASE: IngredientDatabase = {
             description: "Thiamin mononitrate, a synthetic form of Vitamin B1, is essential for energy metabolism and maintaining healthy nerve and heart function, making it generally beneficial when consumed in appropriate amounts",
             alternatives: []
         },
+        "thiamin mononitate": { // typo
+            description: "Thiamin mononitrate, a synthetic form of Vitamin B1, is essential for energy metabolism and maintaining healthy nerve and heart function, making it generally beneficial when consumed in appropriate amounts",
+            alternatives: []
+        },
         "riboflavin": {
             description: "Riboflavin, also known as Vitamin B2, is essential for energy production, cellular function, and maintaining healthy skin and vision, making it generally beneficial when consumed in appropriate amounts",
             alternatives: []
@@ -79,12 +83,32 @@ export const INGREDIENTS_DATABASE: IngredientDatabase = {
         "milk": {
             description: "Milk is a good source of essential nutrients like calcium, vitamin D, and protein, making it generally beneficial for bone health and overall nutrition when consumed in moderation",
             alternatives: []
+        },
+        "citric acid": {
+            description: "Citric acid, a natural compound found in citrus fruits, is generally safe and beneficial as an acidity regulator and preservative when consumed in moderate amounts",
+            alternatives: []
+        },
+        "onion powder": {
+            description: "Onion powder is rich in antioxidants and nutrients that support heart health, immunity, and blood sugar regulation, making it a beneficial seasoning when used in moderation",
+            alternatives: []
+        },
+        "garlic powder": {
+            description: "Garlic powder is rich in antioxidants and compounds that support heart health, immunity, and overall well-being, making it a beneficial ingredient when used in moderation",
+            alternatives: []
+        },
+        "buttermilk": {
+            description: "Buttermilk is rich in probiotics, calcium, and vitamins, supporting gut health, bone strength, and overall well-being, making it a nutritious choice when consumed in moderation",
+            alternatives: []
         }
     },
 
     // YELLOW category - Potentially concerning ingredients or misleading terms
     yellow: {
         "natural flavors": {
+            description: "Can include a wide range of processed additives derived from natural sources but heavily processed",
+            alternatives: ["specific named flavors", "spices", "herbs"]
+        },
+        "natural flavor": {
             description: "Can include a wide range of processed additives derived from natural sources but heavily processed",
             alternatives: ["specific named flavors", "spices", "herbs"]
         },
@@ -158,6 +182,46 @@ export const INGREDIENTS_DATABASE: IngredientDatabase = {
         },
         "made from corn": {
             description: "Corn-based ingredients can provide essential nutrients like fiber, vitamins, and antioxidants, but their health benefits vary depending on the level of processing and added ingredients",
+            alternatives: []
+        },
+        "salt": {
+            description: ": Salt is essential for body functions like fluid balance and nerve transmission, but excessive consumption can lead to high blood pressure and other health risks",
+            alternatives: []
+        },
+        "sugar": {
+            description: "Sugar provides a quick source of energy, but excessive consumption can lead to health issues like weight gain, tooth decay, and an increased risk of chronic diseases such as diabetes",
+            alternatives: []
+        },
+        "artifical color": {
+            description: "Artificial colors are generally safe in regulated amounts, but some studies suggest potential links to hyperactivity in children and other health concerns, making moderation important",
+            alternatives: []
+        },
+        "red 40 lake": {
+            description: "Red 40 Lake, a synthetic food dye, is generally considered safe in regulated amounts, but it has been linked to potential behavioral issues in children and allergic reactions in sensitive individuals",
+            alternatives: []
+        },
+        "yellow 6 lake": {
+            description: "Yellow 6 Lake, a synthetic food dye, is generally considered safe in regulated amounts, but it has been linked to potential allergic reactions, behavioral issues in children, and other health concerns when consumed excessively",
+            alternatives: []
+        },
+        "yellow 6": {
+            description: "Yellow 6, a synthetic food dye, is generally considered safe in regulated amounts, but it has been associated with potential allergic reactions, hyperactivity in children, and other health concerns when consumed excessively",
+            alternatives: []
+        },
+        "yellow 5": {
+            description: "Yellow 5, also known as tartrazine, is generally considered safe in regulated amounts, but it has been linked to potential allergic reactions, hyperactivity in children, and other health concerns when consumed excessively",
+            alternatives: []
+        },
+        "sodium diacetate": {
+            description: "Sodium diacetate, commonly used as a preservative and flavoring agent, is generally safe in regulated amounts, but excessive consumption may lead to potential health concerns like acidity imbalance or irritation",
+            alternatives: []
+        },
+        "disodium inosinate": {
+            description: "Disodium inosinate, a flavor enhancer often used with MSG, is generally safe in regulated amounts, but individuals with gout or kidney issues should limit intake due to its purine content",
+            alternatives: []
+        },
+        "disodium guanylate": {
+            description: "Disodium guanylate, a flavor enhancer often paired with MSG, is generally safe in regulated amounts but may cause issues for individuals sensitive to purines or with gout",
             alternatives: []
         }
     },
