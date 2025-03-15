@@ -1,5 +1,6 @@
 import React from 'react';
 import { Heart } from 'lucide-react';
+import { AddToHomescreen } from './AddToHomescreen';
 
 const Footer: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ const Footer: React.FC = () => {
               This app is designed only to give suggestions recommended by an AI
               service, not from a doctor, nutritionist or other professional.
             </p>
+            <AddToHomescreen className="mt-2" />
           </div>
           <div className="md:w-1/2">
             <h4 className="text-lg font-bold mb-2">
