@@ -17,6 +17,69 @@ const Footer: React.FC = () => {
             <span>for healthier food choices</span>
           </div>
         </div>
+        {/* New sections */}
+        <div className="flex flex-col md:flex-row justify-between mt-6">
+          <div className="md:w-1/2 mb-4 md:mb-0">
+            <h4 className="text-lg font-bold mb-2">Disclaimer</h4>
+            <p className="text-sm">
+              This app is designed only to give suggestions recommended by an AI
+              service, not from a doctor, nutritionist or other professional.
+            </p>
+          </div>
+          <div className="md:w-1/2">
+            <h4 className="text-lg font-bold mb-2">
+              Other apps by the same author
+            </h4>
+            <ul className="text-sm">
+              <li>
+                <a
+                  href="https://rocketmoto.us/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 hover:underline"
+                >
+                  RocketMoto
+                </a>{' '}
+                - Discover new routes to explore with your motorcycle.
+              </li>
+              <li>
+                <a
+                  href="https://sitecheck.us/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 hover:underline"
+                >
+                  SiteCheck
+                </a>{' '}
+                - Track website availability status, check SSL certificates and
+                more.
+              </li>
+              <li>
+                <a
+                  href="https://rocketmap.netlify.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 hover:underline"
+                >
+                  RocketMap
+                </a>{' '}
+                - Track your position against property boundaries.
+              </li>
+              <li>
+                <a
+                  href="https://eventfy.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 hover:underline"
+                >
+                  Eventfy.com
+                </a>{' '}
+                - Use AI to create interactive stories with graphics and
+                multi-player.
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </footer>
   );
