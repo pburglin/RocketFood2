@@ -112,10 +112,18 @@ export const INGREDIENTS_DATABASE: IngredientDatabase = {
             description: "Acts as an emulsifier and contains beneficial compounds like choline, supporting cellular and brain health",
             alternatives: []
         },
-        "baking soda": {
-            description: "Safe in small amounts and can aid digestion, but excessive use may cause health issues like stomach upset or electrolyte imbalance",
+         "tomato powder": {
+            description: "Dehydrated tomatoes, retaining most of the nutrients; beneficial if pure and without additives",
             alternatives: []
-        }
+        },
+        "milk ingredients": {
+            description: "Can vary in processing; minimally processed milk ingredients can be nutritious, while highly processed ones may have added sugars or unhealthy fats",
+            alternatives: ["specific milk ingredient, like 'organic milk'", "plant-based milk alternatives"]
+        },
+        "parmesan cheese": {
+            description: "Parmesan cheese is rich in calcium and protein, but its high saturated fat and sodium content can pose health risks if consumed in excess",
+            alternatives: []
+        },
     },
 
     // YELLOW category - Potentially concerning ingredients or misleading terms
@@ -252,14 +260,30 @@ export const INGREDIENTS_DATABASE: IngredientDatabase = {
             description: "Contains beneficial antioxidants but is high in saturated fats, which may raise cholesterol levels and increase heart disease risk",
             alternatives: []
         },
+        "parmesan cheese": {
+            description: "Parmesan cheese is rich in calcium and protein, but its high saturated fat and sodium content can pose health risks if consumed in excess",
+            alternatives: []
+        },
+        "potassium salt": {
+            description: "Often used as a sodium substitute, but excessive intake can be harmful, especially for people with kidney problems",
+            alternatives: []
+        },
+        "reduced lactose whey": {
+            description: "A processed dairy product with lower lactose content, but may still contain added sugars or other processed ingredients",
+            alternatives: ["whey protein from grass-fed cows", "plant-based protein powders"]
+        },
         "wheat floor": { // typo
             description: "Whole wheat flour is rich in fiber and nutrients, but refined wheat flour lacks these benefits and can cause blood sugar spikes",
             alternatives: []
         },
-        "cornstarch": {
-            description: "Useful as a thickener but high in refined carbs and low in nutrients, potentially spiking blood sugar levels",
-            alternatives: []
-        }
+        "corn maltodextrin": {
+            description: "Highly processed carbohydrate derived from corn, used as a thickener or filler; can spike blood sugar",
+            alternatives: ["tapioca starch", "arrowroot powder"]
+        },
+        "milk ingredients": {
+            description: "Can vary in processing; minimally processed milk ingredients can be nutritious, while highly processed ones may have added sugars or unhealthy fats",
+            alternatives: ["specific milk ingredient, like 'organic milk'", "plant-based milk alternatives"]
+        },
     },
 
     // RED category - Harmful, toxic, or highly processed ingredients
@@ -323,6 +347,10 @@ export const INGREDIENTS_DATABASE: IngredientDatabase = {
         "sodium benzoate": {
             description: "Preservative that can form benzene (a carcinogen) when combined with vitamin C",
             alternatives: ["citric acid", "vitamin E"]
+        },
+        "red 40": {
+            description: "Artificial color linked to potential hyperactivity and other health concerns",
+            alternatives: ["beet juice", "pomegranate juice", "natural food colorings"]
         }
     },
 
