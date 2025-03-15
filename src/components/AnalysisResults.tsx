@@ -86,39 +86,41 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({ results, overallScore
         </div>
         
         <ul className="divide-y divide-gray-200">
-          {results.map((result, index) => (
-            <li key={index} className="p-4">
-              <div 
-                className="flex items-center justify-between cursor-pointer"
-                onClick={() => toggleItem(result.ingredient)}
-              >
-                <div className="flex items-center">
-                  {getCategoryIcon(result.category)}
-                  <span className="ml-2 font-medium">{result.ingredient}</span>
+          {results
+            .filter(result => !['healthcategory', 'description', 'alternatives'].includes(result.ingredient.toLowerCase()))
+            .map((result, index) => (
+              <li key={index} className="p-4">
+                <div
+                  className="flex items-center justify-between cursor-pointer"
+                  onClick={() => toggleItem(result.ingredient)}
+                >
+                  <div className="flex items-center">
+                    {getCategoryIcon(result.category)}
+                    <span className="ml-2 font-medium">{result.ingredient}</span>
+                  </div>
+                  {expandedItems[result.ingredient] ?
+                    <ChevronUp className="h-5 w-5 text-gray-400" /> :
+                    <ChevronDown className="h-5 w-5 text-gray-400" />
+                  }
                 </div>
-                {expandedItems[result.ingredient] ? 
-                  <ChevronUp className="h-5 w-5 text-gray-400" /> : 
-                  <ChevronDown className="h-5 w-5 text-gray-400" />
-                }
-              </div>
-              
-              {expandedItems[result.ingredient] && (
-                <div className="mt-2 pl-7">
-                  <p className="text-gray-600 mb-2">{result.description}</p>
-                  {result.alternatives.length > 0 && (
-                    <div>
-                      <p className="text-sm font-medium text-gray-700">Healthier alternatives:</p>
-                      <ul className="list-disc pl-5 text-sm text-gray-600">
-                        {result.alternatives.map((alt, i) => (
-                          <li key={i}>{alt}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
-              )}
-            </li>
-          ))}
+
+                {expandedItems[result.ingredient] && (
+                  <div className="mt-2 pl-7">
+                    <p className="text-gray-600 mb-2">{result.description}</p>
+                    {result.alternatives.length > 0 && (
+                      <div>
+                        <p className="text-sm font-medium text-gray-700">Healthier alternatives:</p>
+                        <ul className="list-disc pl-5 text-sm text-gray-600">
+                          {result.alternatives.map((alt, i) => (
+                            <li key={i}>{alt}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </li>
+            ))}
         </ul>
       </div>
       
