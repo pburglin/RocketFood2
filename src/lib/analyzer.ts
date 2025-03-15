@@ -1,5 +1,5 @@
 import { INGREDIENTS_DATABASE } from '../data/ingredients';
-import { AnalysisResult, LLMIngredientResponse } from '../types';
+import { AnalysisResult } from '../types';
 import { queryLLMForIngredients } from './llm';
 
 export async function analyzeIngredients(ingredients: string[]): Promise<AnalysisResult[]> {
@@ -48,13 +48,21 @@ export async function analyzeIngredients(ingredients: string[]): Promise<Analysi
       
       if (llmResponse) {
         for (const [ingredient, data] of Object.entries(llmResponse)) {
-          const category = data.healthCategory.toLowerCase() as 'green' | 'yellow' | 'red';
-          
+          let category: 'green' | 'yellow' | 'red' | 'unknown' = 'unknown';
+          let description = 'Unknown ingredient, could not be analyzed';
+          let alternatives: string[] = [];
+
+          if (data && data.healthCategory) {
+            category = data.healthCategory.toLowerCase() as 'green' | 'yellow' | 'red';
+            description = data.description;
+            alternatives = data.alternatives;
+          }
+
           results.push({
             ingredient,
-            category: category === 'green' ? 'green' : category === 'yellow' ? 'yellow' : 'red',
-            description: data.description,
-            alternatives: data.alternatives
+            category,
+            description,
+            alternatives
           });
         }
       } else {
