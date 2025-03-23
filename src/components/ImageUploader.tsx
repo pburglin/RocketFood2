@@ -8,7 +8,7 @@ interface ImageUploaderProps {
 
 const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageCaptured, isLoading }) => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [captureMode, setCaptureMode] = useState<"user" | "environment" | undefined>(undefined);
+  const [captureMode, setCaptureMode] = useState<"environment" | "undefined" | undefined>(undefined);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,7 +23,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageCaptured, isLoadin
     }
   };
 
-  const openFileDialog = (mode?: "user" | "environment") => {
+  const openFileDialog = (mode?: "environment" | "undefined") => {
     setCaptureMode(mode);
     fileInputRef.current?.click();
   };
