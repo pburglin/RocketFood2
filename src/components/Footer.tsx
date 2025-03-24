@@ -14,7 +14,7 @@ const Footer: React.FC = () => {
             </p>
           </div>
           <div className="md:w-1/2">
-            <div className="flex">
+            <div className="flex text-sm">
             <span>Made with &nbsp;</span>
             <Heart className="h-4 w-4 text-red-500" />
             <span>&nbsp; for healthier food choices</span>
