@@ -39,7 +39,7 @@ const Footer: React.FC = () => {
             <h4 className="text-lg font-bold mb-2">
               Other apps by the same author
             </h4>
-            <ul className="text-sm">
+            <ul className="text-sm list-disc ml-5">
               <li>
                 <a
                   href="https://rocketmoto.us/"
@@ -95,4 +95,3 @@ const Footer: React.FC = () => {
 };
 
 export default Footer;
-
