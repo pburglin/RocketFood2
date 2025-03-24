@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Camera, Upload, Loader } from 'lucide-react';
 
 interface ImageUploaderProps {
@@ -9,7 +9,15 @@ interface ImageUploaderProps {
 const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageCaptured, isLoading }) => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [captureMode, setCaptureMode] = useState<"environment" | "undefined" | undefined>(undefined);
+  const [triggerFileInput, setTriggerFileInput] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (triggerFileInput && fileInputRef.current) {
+      fileInputRef.current.click();
+      setTriggerFileInput(false); // Reset the trigger
+    }
+  }, [triggerFileInput]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -25,7 +33,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageCaptured, isLoadin
 
   const openFileDialog = (mode?: "environment" | "undefined") => {
     setCaptureMode(mode);
-    fileInputRef.current?.click();
+    setTriggerFileInput(true);
   };
 
   return (
