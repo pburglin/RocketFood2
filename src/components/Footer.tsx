@@ -6,25 +6,32 @@ const Footer: React.FC = () => {
   return (
     <footer className="bg-gray-800 text-white py-6">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row justify-between items-center">
-          <div className="mb-4 md:mb-0">
+
+        <div className="flex flex-col md:flex-row justify-between mt-6 items-center">
+          <div className="md:w-1/2 mb-4 md:mb-0">
             <p className="text-sm">
               &copy; {new Date().getFullYear()} RocketFood. All rights reserved.
             </p>
           </div>
-          <div className="flex items-center space-x-1 text-sm">
-            <span>Made with</span>
+          <div className="md:w-1/2">
+            <div className="flex">
+            <span>Made with &nbsp;</span>
             <Heart className="h-4 w-4 text-red-500" />
-            <span>for healthier food choices</span>
+            <span>&nbsp; for healthier food choices</span>
+            </div>
           </div>
         </div>
-        {/* New sections */}
+
         <div className="flex flex-col md:flex-row justify-between mt-6">
           <div className="md:w-1/2 mb-4 md:mb-0">
             <h4 className="text-lg font-bold mb-2">Disclaimer</h4>
             <p className="text-sm">
               This app is designed only to give suggestions recommended by an AI
               service, not from a doctor, nutritionist or other professional.
+            </p>
+            <br/>
+            <p className="text-sm">
+              This web app is designed to work best for cellphone and tablet devices (and so far tested with iPhone only).
             </p>
             <AddToHomescreen className="mt-2" />
           </div>
@@ -88,3 +95,4 @@ const Footer: React.FC = () => {
 };
 
 export default Footer;
+
