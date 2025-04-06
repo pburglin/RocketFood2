@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ImageUploader from './components/ImageUploader';
+import AllergyProfile from './components/AllergyProfile'; // Import AllergyProfile
 import AnalysisResults from './components/AnalysisResults';
 import Tips from './components/Tips';
 import { extractTextFromImage, extractIngredientsFromText } from './lib/vision';
@@ -9,16 +10,54 @@ import { analyzeIngredients, getOverallScore } from './lib/analyzer';
 import { AnalysisResult } from './types';
 import { AlertCircle } from 'lucide-react';
 import { VisionService } from './lib/utils';
+import { useEffect } from 'react'; // Import useEffect
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [userAllergies, setUserAllergies] = useState<string[]>([]); // State for allergies
   const [extractedText, setExtractedText] = useState<string>('');
   const [analysisResults, setAnalysisResults] = useState<AnalysisResult[]>([]);
   const [overallScore, setOverallScore] = useState<{ score: 'green' | 'yellow' | 'red', reason: string } | null>(null);
   const visionService = import.meta.env.VITE_DEFAULT_VISION_SERVICE === 'openrouter' 
     ? VisionService.OPENROUTER 
     : VisionService.GOOGLE_CLOUD_VISION;
+
+  // Load allergies from local storage on mount
+  useEffect(() => {
+    const storedAllergies = localStorage.getItem('userAllergies');
+    if (storedAllergies) {
+      try {
+        const parsedAllergies = JSON.parse(storedAllergies);
+        if (Array.isArray(parsedAllergies)) {
+          setUserAllergies(parsedAllergies);
+        }
+      } catch (e) {
+        console.error("Failed to parse allergies from local storage", e);
+        localStorage.removeItem('userAllergies'); // Clear invalid data
+      }
+    }
+    
+    // Optional: Listen for changes in local storage made by AllergyProfile
+    // This ensures App's state stays in sync if the profile is updated
+    const handleStorageChange = (event: StorageEvent) => {
+      if (event.key === 'userAllergies' && event.newValue) {
+         try {
+           const parsedAllergies = JSON.parse(event.newValue);
+           if (Array.isArray(parsedAllergies)) {
+             setUserAllergies(parsedAllergies);
+           }
+         } catch (e) {
+           console.error("Failed to parse allergies from storage event", e);
+         }
+      } else if (event.key === 'userAllergies' && !event.newValue) {
+        setUserAllergies([]); // Handle removal
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+
+  }, []);
   
   const handleImageCaptured = async (file: File) => {
     setIsLoading(true);
@@ -39,8 +78,8 @@ function App() {
         throw new Error('No ingredients could be extracted from the image. Please try again with a clearer image of the ingredients list.');
       }
       
-      // Analyze the ingredients
-      const results = await analyzeIngredients(ingredients);
+      // Analyze the ingredients, passing user allergies
+      const results = await analyzeIngredients(ingredients, userAllergies); 
       setAnalysisResults(results);
       
       // Calculate the overall score
@@ -69,6 +108,8 @@ function App() {
         </div>
         
         <ImageUploader onImageCaptured={handleImageCaptured} isLoading={isLoading} />
+
+        <AllergyProfile /> {/* Add AllergyProfile component here */}
         
         {error && (
           <div className="w-full max-w-md mx-auto mt-4 p-4 bg-red-50 text-red-700 rounded-lg flex items-start">
@@ -82,6 +123,7 @@ function App() {
             results={analysisResults} 
             overallScore={overallScore} 
             rawText={extractedText}
+            allergies={userAllergies} // Pass allergies down
           />
         )}
         

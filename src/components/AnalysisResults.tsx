@@ -9,9 +9,10 @@ interface AnalysisResultsProps {
     reason: string;
   };
   rawText: string;
+  allergies?: string[]; // Add allergies prop
 }
 
-const AnalysisResults: React.FC<AnalysisResultsProps> = ({ results, overallScore, rawText }) => {
+const AnalysisResults: React.FC<AnalysisResultsProps> = ({ results, overallScore, rawText, allergies = [] }) => { // Destructure allergies with default
   const [expandedItems, setExpandedItems] = React.useState<Record<string, boolean>>({});
   const [showRawText, setShowRawText] = React.useState(false);
   
@@ -96,21 +97,26 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({ results, overallScore
                 >
                   <div className="flex items-center">
                     {getCategoryIcon(result.category)}
-                    <span className="ml-2 font-medium">{result.ingredient}</span>
+                    <span className={`ml-2 font-medium ${
+                      allergies.includes(result.ingredient.toLowerCase()) ? 'text-red-600 dark:text-red-400 font-bold' : ''
+                    }`}>
+                      {result.ingredient}
+                      {allergies.includes(result.ingredient.toLowerCase()) && ' (Allergen)'}
+                    </span>
                   </div>
                   {expandedItems[result.ingredient] ?
-                    <ChevronUp className="h-5 w-5 text-gray-400" /> :
-                    <ChevronDown className="h-5 w-5 text-gray-400" />
+                    <ChevronUp className="h-5 w-5 text-gray-400 dark:text-gray-500" /> :
+                    <ChevronDown className="h-5 w-5 text-gray-400 dark:text-gray-500" />
                   }
                 </div>
 
                 {expandedItems[result.ingredient] && (
-                  <div className="mt-2 pl-7">
-                    <p className="text-gray-600 mb-2">{result.description}</p>
+                  <div className="mt-2 pl-7 text-gray-600 dark:text-gray-300">
+                    <p className="mb-2">{result.description}</p>
                     {result.alternatives.length > 0 && (
                       <div>
-                        <p className="text-sm font-medium text-gray-700">Healthier alternatives:</p>
-                        <ul className="list-disc pl-5 text-sm text-gray-600">
+                        <p className="text-sm font-medium text-gray-700 dark:text-gray-200">Healthier alternatives:</p>
+                        <ul className="list-disc pl-5 text-sm">
                           {result.alternatives.map((alt, i) => (
                             <li key={i}>{alt}</li>
                           ))}
@@ -127,14 +133,14 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({ results, overallScore
       <div className="mt-6">
         <button
           onClick={() => setShowRawText(!showRawText)}
-          className="flex items-center text-sm text-gray-600 hover:text-gray-800"
+          className="flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
         >
           {showRawText ? <ChevronUp className="h-4 w-4 mr-1" /> : <ChevronDown className="h-4 w-4 mr-1" />}
           {showRawText ? 'Hide extracted text' : 'Show extracted text'}
         </button>
         
         {showRawText && (
-          <div className="mt-2 p-3 bg-gray-50 rounded-md text-sm text-gray-700 whitespace-pre-wrap">
+          <div className="mt-2 p-3 bg-gray-50 dark:bg-gray-700 rounded-md text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
             {rawText || 'No text extracted'}
           </div>
         )}

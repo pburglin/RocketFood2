@@ -31,9 +31,23 @@ const Footer: React.FC = () => {
             </p>
             <br/>
             <p className="text-sm">
+              This app utilizes Generative AI models like Meta's Llama for Optical Character Recognition (OCR) and Google's Gemini for generating recommendations. For more details on the technology stack, please visit the project's{' '}
+              <a
+                href="https://github.com/pburglin/RocketFood2"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-400 hover:underline"
+              >
+                GitHub repository
+              </a>.
+            </p>
+            <br/>
+            <p className="text-sm">
               This web app is designed to work best for cellphone and tablet devices (and so far tested with iPhone only).
             </p>
-            <AddToHomescreen className="mt-2" />
+            <div className="flex justify-center">
+              <AddToHomescreen className="mt-2 text-sm" />
+            </div>
           </div>
           <div className="md:w-1/2">
             <h4 className="text-lg font-bold mb-2">

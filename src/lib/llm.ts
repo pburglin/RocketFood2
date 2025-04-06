@@ -1,8 +1,15 @@
 import { LLMResponse, LLMIngredientResponse } from '../types';
 
-export async function queryLLMForIngredients(ingredients: string[]): Promise<LLMIngredientResponse | null> {
+// Add optional allergies parameter
+export async function queryLLMForIngredients(ingredients: string[], allergies: string[] = []): Promise<LLMIngredientResponse | null> {
+  
+  let allergyInfo = '';
+  if (allergies.length > 0) {
+    allergyInfo = `\n\nIMPORTANT: The user is allergic to the following ingredients: ${allergies.join(', ')}. Please pay special attention to these and clearly mark them if they appear in the list or are related to any analyzed ingredient.`;
+  }
+
   const prompt = `
-In a scale of Green as healthy, Yellow as warning and Red as unhealthy, analyze these food ingredients: ${ingredients.join(', ')}
+In a scale of Green as healthy, Yellow as warning and Red as unhealthy, analyze these food ingredients: ${ingredients.join(', ')}${allergyInfo}
 
 Return a JSON structure with 1. how healthy each food ingredient is, 2. in a single sentence, why; and 3. what are potential alternative healthier ingredients.
 

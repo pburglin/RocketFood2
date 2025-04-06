@@ -2,7 +2,8 @@ import { INGREDIENTS_DATABASE } from '../data/ingredients';
 import { AnalysisResult } from '../types';
 import { queryLLMForIngredients } from './llm';
 
-export async function analyzeIngredients(ingredients: string[]): Promise<AnalysisResult[]> {
+// Add optional allergies parameter
+export async function analyzeIngredients(ingredients: string[], allergies: string[] = []): Promise<AnalysisResult[]> {
   const results: AnalysisResult[] = [];
   const unknownIngredients: string[] = [];
   
@@ -44,7 +45,8 @@ export async function analyzeIngredients(ingredients: string[]): Promise<Analysi
   // Second pass: query LLM for unknown ingredients
   if (unknownIngredients.length > 0) {
     try {
-      const llmResponse = await queryLLMForIngredients(unknownIngredients);
+      // Pass allergies to the LLM query
+      const llmResponse = await queryLLMForIngredients(unknownIngredients, allergies); 
       
       if (llmResponse) {
         for (const [ingredient, data] of Object.entries(llmResponse)) {
