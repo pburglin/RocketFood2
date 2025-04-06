@@ -42,7 +42,7 @@ const AllergyProfile: React.FC<AllergyProfileProps> = ({ className }) => {
 
   return (
     // Removed dark theme classes (dark:...)
-    <div className={`mt-6 p-4 border border-gray-300 rounded-lg bg-white shadow-sm ${className || ''}`}> {/* Apply className */}
+    <div className={`w-full max-w-2xl mx-auto mt-6 p-4 border border-gray-300 rounded-lg bg-white shadow-sm ${className || ''}`}> {/* Apply className */}
       <h3 className="text-lg font-semibold mb-3 text-gray-900">My Allergy Profile</h3>
       <form onSubmit={handleAddAllergy} className="flex items-center mb-3">
         <input
