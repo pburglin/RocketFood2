@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 
-const AllergyProfile: React.FC = () => {
+// Define props interface to accept className
+interface AllergyProfileProps {
+  className?: string;
+}
+
+const AllergyProfile: React.FC<AllergyProfileProps> = ({ className }) => {
   const [allergies, setAllergies] = useState<string[]>([]);
   const [newAllergy, setNewAllergy] = useState('');
 
@@ -37,7 +42,7 @@ const AllergyProfile: React.FC = () => {
 
   return (
     // Removed dark theme classes (dark:...)
-    <div className="mt-6 p-4 border border-gray-300 rounded-lg bg-white shadow-sm">
+    <div className={`mt-6 p-4 border border-gray-300 rounded-lg bg-white shadow-sm ${className || ''}`}> {/* Apply className */}
       <h3 className="text-lg font-semibold mb-3 text-gray-900">My Allergy Profile</h3>
       <form onSubmit={handleAddAllergy} className="flex items-center mb-3">
         <input

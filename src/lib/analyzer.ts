@@ -94,12 +94,16 @@ export async function analyzeIngredients(ingredients: string[], allergies: strin
 
   // Final pass: Override category to 'red' for any allergens and update description
   if (allergies.length > 0) {
+    console.log("Allergy check - Allergies:", allergies); // DEBUG LOG
     for (const result of results) {
-      const isAllergen = allergies.some(allergy => 
+      console.log(`Allergy check - Checking ingredient: "${result.ingredient}" (Category: ${result.category})`); // DEBUG LOG
+      const isAllergen = allergies.some(allergy => {
         // Use a more robust check: exact match or word boundary match
-        result.ingredient.toLowerCase() === allergy.toLowerCase() || 
+        const match = result.ingredient.toLowerCase() === allergy.toLowerCase() ||
         new RegExp(`\\b${allergy.toLowerCase()}\\b`).test(result.ingredient.toLowerCase())
-      );
+        // console.log(`  ...against allergy: "${allergy}", Match: ${match}`); // DEBUG LOG (Optional finer detail)
+        return match;
+      });
 
       if (isAllergen && result.category !== 'red') { // Only modify if not already red
         const originalCategory = result.category;

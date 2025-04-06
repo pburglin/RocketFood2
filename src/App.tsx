@@ -109,7 +109,7 @@ function App() {
         
         <ImageUploader onImageCaptured={handleImageCaptured} isLoading={isLoading} />
 
-        <AllergyProfile /> {/* Add AllergyProfile component here */}
+        <AllergyProfile className="mb-6" /> {/* Add margin-bottom for spacing */}
         
         {error && (
           <div className="w-full max-w-md mx-auto mt-4 p-4 bg-red-50 text-red-700 rounded-lg flex items-start">
