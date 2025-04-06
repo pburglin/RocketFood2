@@ -91,6 +91,18 @@ export async function analyzeIngredients(ingredients: string[], allergies: strin
       }
     }
   }
+
+  // Final pass: Override category to 'red' for any allergens
+  if (allergies.length > 0) {
+    for (const result of results) {
+      const isAllergen = allergies.some(allergy => 
+        result.ingredient.toLowerCase().includes(allergy.toLowerCase())
+      );
+      if (isAllergen) {
+        result.category = 'red';
+      }
+    }
+  }
   
   return results;
 }
