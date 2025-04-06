@@ -95,9 +95,24 @@ export async function analyzeIngredients(ingredients: string[], allergies: strin
   return results;
 }
 
-export function getOverallScore(results: AnalysisResult[]): { score: 'green' | 'yellow' | 'red', reason: string } {
+// Add allergies parameter
+export function getOverallScore(results: AnalysisResult[], allergies: string[] = []): { score: 'green' | 'yellow' | 'red', reason: string } {
   if (results.length === 0) {
     return { score: 'green', reason: 'No ingredients to analyze' };
+  }
+  
+  // Check for allergens first
+  const allergenFound = results.some(result => 
+    allergies.some(allergy => 
+      result.ingredient.toLowerCase().includes(allergy.toLowerCase())
+    )
+  );
+
+  if (allergenFound) {
+    return {
+      score: 'red',
+      reason: 'Contains an ingredient you are allergic to.'
+    };
   }
   
   const counts = {
@@ -108,25 +123,14 @@ export function getOverallScore(results: AnalysisResult[]): { score: 'green' | '
   };
   
   const total = results.length;
-  
-  // Check if any of the first three ingredients are red
-  const firstThree = results.slice(0, 3);
-  const hasRedInFirstThree = firstThree.some(r => r.category === 'red');
-  
-  // If any of the first three ingredients are red, the overall score is red
-  if (hasRedInFirstThree) {
-    return { 
-      score: 'red', 
-      reason: 'One or more of the main ingredients are harmful or toxic' 
-    };
-  }
-  
-  // If more than 20% of ingredients are red, the overall score is red
-  if (counts.red / total > 0.2) {
-    return { 
-      score: 'red', 
-      reason: `${counts.red} out of ${total} ingredients are harmful or toxic` 
-    };
+
+  // Check if ANY ingredient is red
+  const hasRedIngredient = results.some(r => r.category === 'red');
+  if (hasRedIngredient) {
+     return { 
+       score: 'red', 
+       reason: 'Contains one or more harmful or toxic ingredients.' 
+     };
   }
   
   // If more than 40% of ingredients are yellow or red, the overall score is yellow

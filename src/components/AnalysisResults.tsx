@@ -97,25 +97,34 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({ results, overallScore
                 >
                   <div className="flex items-center">
                     {getCategoryIcon(result.category)}
-                    <span className={`ml-2 font-medium ${
-                      allergies.includes(result.ingredient.toLowerCase()) ? 'text-red-600 dark:text-red-400 font-bold' : ''
-                    }`}>
-                      {result.ingredient}
-                      {allergies.includes(result.ingredient.toLowerCase()) && ' (Allergen)'}
-                    </span>
+                    {(() => {
+                      // Check if any allergy is a substring of the ingredient (case-insensitive)
+                      const isAllergen = allergies.some(allergy => 
+                        result.ingredient.toLowerCase().includes(allergy.toLowerCase())
+                      );
+                      return (
+                        <span className={`ml-2 font-medium ${
+                          isAllergen ? 'text-red-600 font-bold' : '' // Removed dark theme class
+                        }`}>
+                          {result.ingredient}
+                          {isAllergen && ' (Allergen)'}
+                        </span>
+                      );
+                    })()}
                   </div>
                   {expandedItems[result.ingredient] ?
-                    <ChevronUp className="h-5 w-5 text-gray-400 dark:text-gray-500" /> :
-                    <ChevronDown className="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                    <ChevronUp className="h-5 w-5 text-gray-400" /> : // Removed dark theme class
+                    <ChevronDown className="h-5 w-5 text-gray-400" /> // Removed dark theme class
                   }
                 </div>
 
                 {expandedItems[result.ingredient] && (
-                  <div className="mt-2 pl-7 text-gray-600 dark:text-gray-300">
+                  // Removed dark theme classes
+                  <div className="mt-2 pl-7 text-gray-600"> 
                     <p className="mb-2">{result.description}</p>
                     {result.alternatives.length > 0 && (
                       <div>
-                        <p className="text-sm font-medium text-gray-700 dark:text-gray-200">Healthier alternatives:</p>
+                        <p className="text-sm font-medium text-gray-700">Healthier alternatives:</p>
                         <ul className="list-disc pl-5 text-sm">
                           {result.alternatives.map((alt, i) => (
                             <li key={i}>{alt}</li>
@@ -133,14 +142,16 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({ results, overallScore
       <div className="mt-6">
         <button
           onClick={() => setShowRawText(!showRawText)}
-          className="flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
+          // Removed dark theme classes
+          className="flex items-center text-sm text-gray-600 hover:text-gray-800" 
         >
           {showRawText ? <ChevronUp className="h-4 w-4 mr-1" /> : <ChevronDown className="h-4 w-4 mr-1" />}
           {showRawText ? 'Hide extracted text' : 'Show extracted text'}
         </button>
         
         {showRawText && (
-          <div className="mt-2 p-3 bg-gray-50 dark:bg-gray-700 rounded-md text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
+          // Removed dark theme classes
+          <div className="mt-2 p-3 bg-gray-50 rounded-md text-sm text-gray-700 whitespace-pre-wrap"> 
             {rawText || 'No text extracted'}
           </div>
         )}

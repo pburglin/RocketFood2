@@ -31,36 +31,39 @@ const AllergyProfile: React.FC = () => {
   };
 
   return (
-    <div className="mt-6 p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 shadow-sm">
-      <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">My Allergy Profile</h3>
+    // Removed dark theme classes (dark:...)
+    <div className="mt-6 p-4 border border-gray-300 rounded-lg bg-white shadow-sm">
+      <h3 className="text-lg font-semibold mb-3 text-gray-900">My Allergy Profile</h3>
       <form onSubmit={handleAddAllergy} className="flex items-center mb-3">
         <input
           type="text"
           value={newAllergy}
           onChange={(e) => setNewAllergy(e.target.value)}
           placeholder="Enter an ingredient you're allergic to"
-          className="flex-grow p-2 border border-gray-300 dark:border-gray-600 rounded-l-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
+          className="flex-grow p-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-indigo-500" // Removed dark theme classes
         />
         <button
           type="submit"
-          className="px-4 py-2 bg-indigo-600 text-white rounded-r-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 dark:focus:ring-offset-gray-800"
+          className="px-4 py-2 bg-indigo-600 text-white rounded-r-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1" // Removed dark theme classes
         >
           Add
         </button>
       </form>
       {allergies.length > 0 && (
         <div>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Your listed allergies:</p>
+          <p className="text-sm text-gray-600 mb-2">Your listed allergies:</p>
           <ul className="flex flex-wrap gap-2">
             {allergies.map((allergy) => (
               <li
                 key={allergy}
-                className="flex items-center bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 text-sm font-medium px-2.5 py-0.5 rounded-full"
+                // Adjusted allergy tag style for light theme
+                className="flex items-center bg-red-100 text-red-800 text-sm font-medium px-2.5 py-0.5 rounded-full" 
               >
                 {allergy}
                 <button
                   onClick={() => handleRemoveAllergy(allergy)}
-                  className="ml-1.5 text-red-500 dark:text-red-300 hover:text-red-700 dark:hover:text-red-100 focus:outline-none"
+                  // Adjusted remove button style for light theme
+                  className="ml-1.5 text-red-500 hover:text-red-700 focus:outline-none" 
                   aria-label={`Remove ${allergy}`}
                 >
                   <X size={14} />

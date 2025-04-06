@@ -82,8 +82,8 @@ function App() {
       const results = await analyzeIngredients(ingredients, userAllergies); 
       setAnalysisResults(results);
       
-      // Calculate the overall score
-      const score = getOverallScore(results);
+      // Calculate the overall score, passing user allergies
+      const score = getOverallScore(results, userAllergies); 
       setOverallScore(score);
       
     } catch (err) {
