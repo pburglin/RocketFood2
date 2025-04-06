@@ -238,7 +238,7 @@ export async function extractIngredientsFromText(text: string): Promise<string[]
             let cleaned = item.trim();
             // Remove text within parentheses (often explanations or sub-ingredients)
             // Keep content for potential later processing if needed
-            cleaned = cleaned.replace(/\([^)]*\)/g, '');
+            // cleaned = cleaned.replace(/\([^)]*\)/g, ''); // <-- Temporarily commented out to preserve parenthesized ingredients
             // Remove text within brackets and braces
             cleaned = cleaned.replace(/\[[^\]]*\]/g, '');
             cleaned = cleaned.replace(/\{[^}]*\}/g, '');
