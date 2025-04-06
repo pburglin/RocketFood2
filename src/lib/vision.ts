@@ -89,7 +89,7 @@ async function extractTextWithGoogleVision(imageFile: File): Promise<string> {
 
 export async function extractIngredientsFromText(text: string): Promise<string[]> {
   // Look for common patterns that indicate ingredients lists
-  const ingredientsRegex = /ingredients:?\s*([^.]*)/i;
+  const ingredientsRegex = /(?:ingredients|contains|made with):?\s*([\s\S]*?)(?:\n\n|$)/i;
   const match = text.match(ingredientsRegex);
   
   let ingredientsText = '';
@@ -98,8 +98,12 @@ export async function extractIngredientsFromText(text: string): Promise<string[]
     // Get the ingredients text
     ingredientsText = match[1].trim();
   } else {
-    // If no ingredients section is found, use the full text
-    ingredientsText = text;
+    // If no ingredients section is found, look for text that looks like an ingredients list
+    // Common patterns: text with many commas, or text with many line breaks
+    const likelyIngredients = text.split(/\n\n/)[0]; // Take first paragraph if multi-paragraph
+    ingredientsText = likelyIngredients.includes(',') || likelyIngredients.split('\n').length > 3
+      ? likelyIngredients
+      : text;
   }
   
   // First, replace specific separators with a standard separator
@@ -122,11 +126,24 @@ export async function extractIngredientsFromText(text: string): Promise<string[]
   // For example, "red 40 -lake" should be "red 40 lake"
   processedText = processedText.replace(/\s-([^\s])/g, ' $1');
   
-  // Split by common separators and clean up each ingredient
+  // Split by common separators while preserving multi-word ingredients
   const ingredients = processedText
-    .split(/,|\.|•|\*|;/)
-    .map(item => item.trim())
-    .filter(item => item.length > 0 && !/^\d+$/.test(item)); // Filter out numbers and empty items
+    .split(/(?:,\s*|\n\s*|•\s*|\*\s*|;\s*)(?![^(]*\))/) // Split but avoid splitting inside parentheses
+    .map(item => {
+      // Clean up each ingredient
+      let cleaned = item.trim();
+      // Remove any remaining leading/trailing punctuation
+      cleaned = cleaned.replace(/^[,\-•*;.]+|[,\-•*;.]+$/g, '').trim();
+      // Remove any percentage values
+      cleaned = cleaned.replace(/\s*\d+%\s*/g, ' ').trim();
+      return cleaned;
+    })
+    .filter(item => {
+      // Filter out empty items, pure numbers, and common non-ingredient text
+      return item.length > 0 &&
+             !/^\d+$/.test(item) &&
+             !/contains|ingredients|allergens|may contain/i.test(item);
+    });
   
   return [...new Set(ingredients)]; // Remove duplicates
 }
