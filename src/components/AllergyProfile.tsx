@@ -20,8 +20,13 @@ const AllergyProfile: React.FC = () => {
 
   const handleAddAllergy = (e: React.FormEvent) => {
     e.preventDefault();
-    if (newAllergy.trim() && !allergies.includes(newAllergy.trim().toLowerCase())) {
-      setAllergies([...allergies, newAllergy.trim().toLowerCase()]);
+    const enteredAllergies = newAllergy
+      .split(',')
+      .map(a => a.trim().toLowerCase())
+      .filter(a => a && !allergies.includes(a)); // Filter out empty strings and duplicates
+
+    if (enteredAllergies.length > 0) {
+      setAllergies([...allergies, ...enteredAllergies]);
       setNewAllergy('');
     }
   };
@@ -39,7 +44,7 @@ const AllergyProfile: React.FC = () => {
           type="text"
           value={newAllergy}
           onChange={(e) => setNewAllergy(e.target.value)}
-          placeholder="Enter an ingredient you're allergic to"
+          placeholder="Enter allergies, separated by commas (e.g., milk, peanuts)"
           className="flex-grow p-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-indigo-500" // Removed dark theme classes
         />
         <button

@@ -21,6 +21,7 @@ RocketFood is a modern web application that helps users make healthier food choi
   - Google Cloud Vision API for text extraction
   - OpenRouter API with LLaMA Vision model as an alternative
 - **AI Analysis**: OpenAI API for analyzing unknown ingredients
+  - Mistral Large Latest for ingredient health analysis
 - **Icons**: Lucide React for beautiful, consistent iconography
 
 ## Getting Started
@@ -34,7 +35,7 @@ RocketFood is a modern web application that helps users make healthier food choi
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/rocketfood.git
+   git clone git@github.com:pburglin/RocketFood2.git
    cd rocketfood
    ```
 

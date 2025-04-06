@@ -92,14 +92,23 @@ export async function analyzeIngredients(ingredients: string[], allergies: strin
     }
   }
 
-  // Final pass: Override category to 'red' for any allergens
+  // Final pass: Override category to 'red' for any allergens and update description
   if (allergies.length > 0) {
     for (const result of results) {
       const isAllergen = allergies.some(allergy => 
-        result.ingredient.toLowerCase().includes(allergy.toLowerCase())
+        // Use a more robust check: exact match or word boundary match
+        result.ingredient.toLowerCase() === allergy.toLowerCase() || 
+        new RegExp(`\\b${allergy.toLowerCase()}\\b`).test(result.ingredient.toLowerCase())
       );
-      if (isAllergen) {
+
+      if (isAllergen && result.category !== 'red') { // Only modify if not already red
+        const originalCategory = result.category;
+        const originalDescription = result.description;
         result.category = 'red';
+        result.description = `Marked as red because it's in your allergy profile (original classification: ${originalCategory}). Original description: ${originalDescription}`;
+      } else if (isAllergen && result.category === 'red') {
+        // If it was already red, just add a note that it's also an allergen
+         result.description = `This ingredient is classified as red and is also listed in your allergy profile. Original description: ${result.description}`;
       }
     }
   }
