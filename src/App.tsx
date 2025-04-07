@@ -101,8 +101,8 @@ function App() {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">Food Ingredient Scanner</h1>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Scan food ingredient labels to identify potentially harmful or misleading ingredients. 
-            Get instant feedback on the healthiness of your food choices.
+            Scan food labels to identify potentially harmful or misleading ingredients. 
+            Get instant feedback on how healthy your food choices are.
           </p>
         </div>
         
