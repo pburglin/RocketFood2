@@ -4,6 +4,7 @@ import { queryLLMForIngredients } from './llm';
 
 // Add optional allergies parameter
 export async function analyzeIngredients(ingredients: string[], allergies: string[] = []): Promise<AnalysisResult[]> {
+  console.log('[analyzer.ts] Received allergies:', allergies); // <-- ADD LOG
   const results: AnalysisResult[] = [];
   const unknownIngredients: string[] = [];
 
@@ -35,10 +36,17 @@ export async function analyzeIngredients(ingredients: string[], allergies: strin
 
     if (foundInDb && dbCategory && dbData) {
       // Check for allergy immediately if found in DB
-      const isAllergen = allergies.some(allergy =>
-        normalizedIngredient === allergy.toLowerCase() ||
-        new RegExp(`\\b${allergy.toLowerCase()}\\b`).test(normalizedIngredient)
-      );
+      let isAllergen = false; // Initialize
+      if (allergies.length > 0) {
+        isAllergen = allergies.some(allergy => {
+          const allergyLower = allergy.toLowerCase();
+          const matchExact = normalizedIngredient === allergyLower;
+          const matchBoundary = new RegExp(`\\b${allergyLower}\\b`).test(normalizedIngredient);
+          console.log(`[analyzer.ts DB Check] Comparing: '${normalizedIngredient}' vs Allergy: '${allergyLower}'. Exact: ${matchExact}, Boundary: ${matchBoundary}`); // <-- ADD LOG
+          return matchExact || matchBoundary;
+        });
+      }
+
 
       let currentCategory = dbCategory;
       let currentDescription = dbData.description;
@@ -122,15 +130,22 @@ export async function analyzeIngredients(ingredients: string[], allergies: strin
       // We can identify these as results potentially coming from the LLM pass
       // or edge cases missed. A simple check is if the description already indicates an allergy override.
       if (result.description.includes("Marked as red because it's in your allergy profile") || result.description.includes("classified as red and is also listed in your allergy profile")) {
+          console.log(`[analyzer.ts Final Check] Skipping already processed allergen: ${result.ingredient}`); // <-- ADD LOG
           continue; // Already handled
       }
 
-      const isAllergen = allergies.some(allergy => {
-        // Use a more robust check: exact match or word boundary match
-        const match = result.ingredient.toLowerCase() === allergy.toLowerCase() ||
-        new RegExp(`\\b${allergy.toLowerCase()}\\b`).test(result.ingredient.toLowerCase());
-        return match;
-      });
+      let isAllergen = false; // Initialize
+      if (allergies.length > 0) {
+        isAllergen = allergies.some(allergy => {
+          const allergyLower = allergy.toLowerCase();
+          const ingredientLower = result.ingredient.toLowerCase();
+          const matchExact = ingredientLower === allergyLower;
+          const matchBoundary = new RegExp(`\\b${allergyLower}\\b`).test(ingredientLower);
+          console.log(`[analyzer.ts Final Check] Comparing: '${ingredientLower}' vs Allergy: '${allergyLower}'. Exact: ${matchExact}, Boundary: ${matchBoundary}`); // <-- ADD LOG
+          return matchExact || matchBoundary;
+        });
+      }
+
 
       if (isAllergen && result.category !== 'red') { // Only modify if not already red
         const originalCategory = result.category;

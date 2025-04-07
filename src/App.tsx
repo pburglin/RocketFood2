@@ -15,7 +15,7 @@ import { useEffect } from 'react'; // Import useEffect
 function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [userAllergies, setUserAllergies] = useState<string[]>([]); // State for allergies
+  const [userAllergies, setUserAllergies] = useState<string[]>([]); // State for allergies - SOURCE OF TRUTH
   const [extractedText, setExtractedText] = useState<string>('');
   const [analysisResults, setAnalysisResults] = useState<AnalysisResult[]>([]);
   const [overallScore, setOverallScore] = useState<{ score: 'green' | 'yellow' | 'red', reason: string } | null>(null);
@@ -38,26 +38,15 @@ function App() {
         localStorage.removeItem('userAllergies'); // Clear invalid data
       }
     }
-    
-    // Optional: Listen for changes in local storage made by AllergyProfile
-    // This ensures App's state stays in sync if the profile is updated
-    const handleStorageChange = (event: StorageEvent) => {
-      if (event.key === 'userAllergies' && event.newValue) {
-         try {
-           const parsedAllergies = JSON.parse(event.newValue);
-           if (Array.isArray(parsedAllergies)) {
-             setUserAllergies(parsedAllergies);
-           }
-         } catch (e) {
-           console.error("Failed to parse allergies from storage event", e);
-         }
-      } else if (event.key === 'userAllergies' && !event.newValue) {
-        setUserAllergies([]); // Handle removal
-      }
-    };
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    // Removed storage event listener - state is managed centrally now
+  }, []);
 
+  // Function to update allergies state AND save to localStorage
+  const handleUpdateAllergies = useCallback((newAllergies: string[]) => {
+    const sortedAllergies = [...newAllergies].sort(); // Keep sorted for consistency
+    setUserAllergies(sortedAllergies);
+    localStorage.setItem('userAllergies', JSON.stringify(sortedAllergies));
+    console.log('[App.tsx] Updated allergies in state and localStorage:', sortedAllergies); // Log update
   }, []);
   
   // Define the retry callback using useCallback to avoid redefining it on every render
@@ -87,6 +76,7 @@ function App() {
       }
       
       // Analyze the ingredients, passing user allergies
+      console.log('[App.tsx] Analyzing with allergies:', userAllergies); // <-- ADD LOG
       const results = await analyzeIngredients(ingredients, userAllergies); 
       setAnalysisResults(results);
       
@@ -118,7 +108,12 @@ function App() {
         
         <ImageUploader onImageCaptured={handleImageCaptured} isLoading={isLoading} />
 
-        <AllergyProfile className="mb-6" /> {/* Add margin-bottom for spacing */}
+        {/* Pass state and update function to AllergyProfile */}
+        <AllergyProfile 
+          className="mb-6" 
+          allergies={userAllergies} 
+          onUpdateAllergies={handleUpdateAllergies} 
+        /> 
         
         {/* Display Loading/Retry Status or Error */}
         {(isLoading || error) && (

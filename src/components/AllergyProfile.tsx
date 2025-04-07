@@ -1,43 +1,37 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react'; // Removed useEffect
 import { X } from 'lucide-react';
 
-// Define props interface to accept className
+// Define props interface to accept className, allergies, and update function
 interface AllergyProfileProps {
   className?: string;
+  allergies: string[]; // Receive allergies as prop
+  onUpdateAllergies: (newAllergies: string[]) => void; // Receive update function as prop
 }
 
-const AllergyProfile: React.FC<AllergyProfileProps> = ({ className }) => {
-  const [allergies, setAllergies] = useState<string[]>([]);
+const AllergyProfile: React.FC<AllergyProfileProps> = ({ className, allergies, onUpdateAllergies }) => {
+  // Removed internal allergies state - now uses props
   const [newAllergy, setNewAllergy] = useState('');
 
-  // Load allergies from local storage on component mount
-  useEffect(() => {
-    const storedAllergies = localStorage.getItem('userAllergies');
-    if (storedAllergies) {
-      setAllergies(JSON.parse(storedAllergies));
-    }
-  }, []);
-
-  // Save allergies to local storage whenever they change
-  useEffect(() => {
-    localStorage.setItem('userAllergies', JSON.stringify(allergies));
-  }, [allergies]);
+  // Removed useEffect hooks for loading/saving to localStorage - handled by App.tsx
 
   const handleAddAllergy = (e: React.FormEvent) => {
     e.preventDefault();
+    // Use allergies prop for current list
     const enteredAllergies = newAllergy
       .split(',')
       .map(a => a.trim().toLowerCase())
       .filter(a => a && !allergies.includes(a)); // Filter out empty strings and duplicates
 
     if (enteredAllergies.length > 0) {
-      setAllergies([...allergies, ...enteredAllergies]);
+      // Call the update function passed from App.tsx
+      onUpdateAllergies([...allergies, ...enteredAllergies]); 
       setNewAllergy('');
     }
   };
 
   const handleRemoveAllergy = (allergyToRemove: string) => {
-    setAllergies(allergies.filter(allergy => allergy !== allergyToRemove));
+    // Call the update function passed from App.tsx
+    onUpdateAllergies(allergies.filter(allergy => allergy !== allergyToRemove)); 
   };
 
   return (
