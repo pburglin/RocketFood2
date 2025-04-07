@@ -178,7 +178,7 @@ export function getOverallScore(results: AnalysisResult[], allergies: string[] =
   if (allergenFound) {
     return {
       score: 'red',
-      reason: 'Contains an ingredient you are allergic to.'
+      reason: 'Contains one or more ingredients you are allergic to.'
     };
   }
 
