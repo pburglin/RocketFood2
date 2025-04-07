@@ -61,6 +61,26 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({ results, overallScore
         return <HelpCircle className="h-8 w-8 text-gray-500" />;
     }
   };
+
+  const categoryOrder: Record<string, number> = {
+    red: 1,
+    yellow: 2,
+    green: 3,
+  };
+
+  const sortedResults = results
+    .filter(result => !['healthcategory', 'description', 'alternatives'].includes(result.ingredient.toLowerCase()))
+    .sort((a, b) => {
+      const orderA = categoryOrder[a.category] || 4; // Assign lower priority if category is unknown
+      const orderB = categoryOrder[b.category] || 4;
+
+      if (orderA !== orderB) {
+        return orderA - orderB; // Sort by category order
+      }
+
+      // If categories are the same, sort alphabetically by ingredient name
+      return a.ingredient.localeCompare(b.ingredient);
+    });
   
   if (results.length === 0) {
     return null;
@@ -87,9 +107,7 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({ results, overallScore
         </div>
         
         <ul className="divide-y divide-gray-200">
-          {results
-            .filter(result => !['healthcategory', 'description', 'alternatives'].includes(result.ingredient.toLowerCase()))
-            .map((result, index) => (
+          {sortedResults.map((result, index) => (
               <li key={index} className="p-4">
                 <div
                   className="flex items-center justify-between cursor-pointer"

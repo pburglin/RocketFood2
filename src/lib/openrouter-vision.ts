@@ -1,20 +1,5 @@
 import { fileToBase64 } from './utils';
 
-interface OpenRouterResponse {
-  id: string;
-  object: string;
-  created: number;
-  model: string;
-  choices: {
-    index: number;
-    message: {
-      role: string;
-      content: string;
-    };
-    finish_reason: string;
-  }[];
-}
-
 export async function extractTextWithOpenRouter(imageFile: File): Promise<string> {
   try {
     // Convert the image file to base64
@@ -60,14 +45,33 @@ export async function extractTextWithOpenRouter(imageFile: File): Promise<string
       throw new Error(`OpenRouter API error: ${response.statusText}`);
     }
     
-    const data = await response.json() as OpenRouterResponse;
+    const data = await response.json(); // Parse JSON first
+    console.log('OpenRouter API Response:', JSON.stringify(data, null, 2)); // Log the full response
+
+    // Validate the response structure before accessing nested properties
+    if (!data || !data.choices || !Array.isArray(data.choices) || data.choices.length === 0) {
+      console.error('Invalid or empty response structure from OpenRouter:', data);
+      throw new Error('Received an unexpected response format from the vision service. Please try again.');
+    }
+
+    // Check if the first choice has the expected message structure
+    if (!data.choices[0].message || typeof data.choices[0].message.content !== 'string') {
+        console.error('Invalid message structure in OpenRouter response choice:', data.choices[0]);
+        throw new Error('The vision service returned an incomplete analysis. Please try again.');
+    }
     
     // Extract the text from the response
-    const extractedText = data.choices[0]?.message.content || '';
+    const extractedText = data.choices[0].message.content || '';
     return extractedText;
     
   } catch (error) {
-    console.error('Error extracting text with OpenRouter:', error);
-    throw error;
+    // Log the specific error before re-throwing
+    console.error('Error during OpenRouter text extraction:', error);
+    // If it's one of our custom errors, re-throw it directly
+    if (error instanceof Error && (error.message.startsWith('Received an unexpected response format') || error.message.startsWith('The vision service returned an incomplete analysis'))) {
+        throw error;
+    }
+    // Otherwise, wrap it in a generic error message for the user
+    throw new Error('Failed to process image due to a network or API issue. Please check your connection and try again.');
   }
 }
