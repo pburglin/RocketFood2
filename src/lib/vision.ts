@@ -175,6 +175,10 @@ export async function extractIngredientsFromText(text: string): Promise<string[]
 
     // Normalize text: convert to lowercase, replace common separators, handle line breaks
     let processedText = text.toLowerCase();
+
+    // Handle parentheses by replacing them with commas
+    processedText = processedText.replace(/\(/g, ', ').replace(/\)/g, ', ');
+
     processedText = processedText.replace(/\r\n|\r|\n/g, ' '); // Replace line breaks with spaces
     processedText = processedText.replace(/,(?!\s)/g, ', '); // Ensure space after comma
     processedText = processedText.replace(/\s+/g, ' '); // Normalize whitespace to single spaces

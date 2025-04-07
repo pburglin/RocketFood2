@@ -122,7 +122,7 @@ function App() {
         
         {/* Display Loading/Retry Status or Error */}
         {(isLoading || error) && (
-          <div className="w-full max-w-md mx-auto mt-4 p-4 bg-white rounded-lg shadow-md text-center">
+          <div className="w-full max-w-2xl mx-auto mt-4 p-4 bg-white rounded-lg shadow-md text-center">
             {isLoading && !retryStatus && (
               <p className="text-gray-600">Processing image...</p>
             )}
