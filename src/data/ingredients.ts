@@ -224,22 +224,6 @@ export const INGREDIENTS_DATABASE: IngredientDatabase = {
             description: "Artificial colors are generally safe in regulated amounts, but some studies suggest potential links to hyperactivity in children and other health concerns, making moderation important",
             alternatives: []
         },
-        "red 40 lake": {
-            description: "Red 40 Lake, a synthetic food dye, is generally considered safe in regulated amounts, but it has been linked to potential behavioral issues in children and allergic reactions in sensitive individuals",
-            alternatives: []
-        },
-        "yellow 6 lake": {
-            description: "Yellow 6 Lake, a synthetic food dye, is generally considered safe in regulated amounts, but it has been linked to potential allergic reactions, behavioral issues in children, and other health concerns when consumed excessively",
-            alternatives: []
-        },
-        "yellow 6": {
-            description: "Yellow 6, a synthetic food dye, is generally considered safe in regulated amounts, but it has been associated with potential allergic reactions, hyperactivity in children, and other health concerns when consumed excessively",
-            alternatives: []
-        },
-        "yellow 5": {
-            description: "Yellow 5, also known as tartrazine, is generally considered safe in regulated amounts, but it has been linked to potential allergic reactions, hyperactivity in children, and other health concerns when consumed excessively",
-            alternatives: []
-        },
         "sodium diacetate": {
             description: "Sodium diacetate, commonly used as a preservative and flavoring agent, is generally safe in regulated amounts, but excessive consumption may lead to potential health concerns like acidity imbalance or irritation",
             alternatives: []
@@ -351,6 +335,22 @@ export const INGREDIENTS_DATABASE: IngredientDatabase = {
         "red 40": {
             description: "Artificial color linked to potential hyperactivity and other health concerns",
             alternatives: ["beet juice", "pomegranate juice", "natural food colorings"]
+        },
+        "red 40 lake": {
+            description: "Red 40 Lake, a synthetic food dye, is generally considered safe in regulated amounts, but it has been linked to potential behavioral issues in children and allergic reactions in sensitive individuals",
+            alternatives: []
+        },
+        "yellow 6 lake": {
+            description: "Yellow 6 Lake, a synthetic food dye, is generally considered safe in regulated amounts, but it has been linked to potential allergic reactions, behavioral issues in children, and other health concerns when consumed excessively",
+            alternatives: []
+        },
+        "yellow 6": {
+            description: "Yellow 6, a synthetic food dye, is generally considered safe in regulated amounts, but it has been associated with potential allergic reactions, hyperactivity in children, and other health concerns when consumed excessively",
+            alternatives: []
+        },
+        "yellow 5": {
+            description: "Yellow 5, also known as tartrazine, is generally considered safe in regulated amounts, but it has been linked to potential allergic reactions, hyperactivity in children, and other health concerns when consumed excessively",
+            alternatives: []
         }
     },
 

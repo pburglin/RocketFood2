@@ -71,14 +71,19 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({ results, overallScore
   const sortedResults = results
     .filter(result => !['healthcategory', 'description', 'alternatives'].includes(result.ingredient.toLowerCase()))
     .sort((a, b) => {
-      const orderA = categoryOrder[a.category] || 4; // Assign lower priority if category is unknown
-      const orderB = categoryOrder[b.category] || 4;
+      // Check if items are allergens
+      const isAllergenA = allergies.some(allergy => a.ingredient.toLowerCase().includes(allergy.toLowerCase()));
+      const isAllergenB = allergies.some(allergy => b.ingredient.toLowerCase().includes(allergy.toLowerCase()));
 
-      if (orderA !== orderB) {
-        return orderA - orderB; // Sort by category order
+      // Determine sort order: Allergens first (like 'red'), then by category
+      const sortOrderA = isAllergenA ? 1 : (categoryOrder[a.category] || 4);
+      const sortOrderB = isAllergenB ? 1 : (categoryOrder[b.category] || 4);
+
+      if (sortOrderA !== sortOrderB) {
+        return sortOrderA - sortOrderB; // Sort by effective order (allergen > red > yellow > green > unknown)
       }
 
-      // If categories are the same, sort alphabetically by ingredient name
+      // If effective orders are the same, sort alphabetically by ingredient name
       return a.ingredient.localeCompare(b.ingredient);
     });
   
@@ -114,19 +119,26 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({ results, overallScore
                   onClick={() => toggleItem(result.ingredient)}
                 >
                   <div className="flex items-center">
-                    {getCategoryIcon(result.category)}
                     {(() => {
                       // Check if any allergy is a substring of the ingredient (case-insensitive)
                       const isAllergen = allergies.some(allergy => 
                         result.ingredient.toLowerCase().includes(allergy.toLowerCase())
                       );
+                      // Determine the icon based on allergen status
+                      const icon = isAllergen 
+                        ? <XCircle className="h-5 w-5 text-red-500" /> 
+                        : getCategoryIcon(result.category);
+
                       return (
-                        <span className={`ml-2 font-medium ${
-                          isAllergen ? 'text-red-600 font-bold' : '' // Removed dark theme class
-                        }`}>
-                          {result.ingredient}
-                          {isAllergen && ' (Allergen)'}
-                        </span>
+                        <>
+                          {icon}
+                          <span className={`ml-2 font-medium ${
+                            isAllergen ? 'text-red-600 font-bold' : '' // Removed dark theme class
+                          }`}>
+                            {result.ingredient}
+                            {isAllergen && ' (Allergen)'}
+                          </span>
+                        </>
                       );
                     })()}
                   </div>
